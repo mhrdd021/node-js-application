@@ -1,20 +1,17 @@
-const http = require("http");
+const express = require("express");
 const path = require("path");
-const express = require('express');
-const bodyParser = require('body-parser')
-
 const app = express();
+const port = 5000;
 
-const adminRoutes = require('./routes/admin')
-const shopRoutes = require('./routes/shop');
+// Serve static files from the React app's build directory
+app.use(express.static(path.join(__dirname, 'build')));
 
-app.use(bodyParser.urlencoded({extended: false}))
+const ShopRoutes = require("./routes/Shop");
+const AdminRoutes = require("./routes/Admin");
 
-app.use('/admin',adminRoutes)
-app.use(shopRoutes)
+app.use("/admin", AdminRoutes);
+app.use(ShopRoutes);
 
-app.use((req, res, next) => {
-    res.status(404).sendFile(path.join(__dirname, 'views', '404.html'))
+app.listen(port, () => {
+  console.log(`App Listening on Port ${port}`);
 });
-
-app.listen(4000);
